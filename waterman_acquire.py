@@ -56,5 +56,17 @@ def acquire_superstore(use_cache = False):
     # convert the date columns to datetime
     superstore_df['order_date'] = pd.to_datetime(superstore_df['order_date'])
     superstore_df['ship_date'] = pd.to_datetime(superstore_df['ship_date'])
-    
+    # Dropping duplicate columns
+    superstore_df = superstore_df.drop(columns= ['customer_name', 'region_id', 'category_id', 'country', 'product_id'])
+    # Set time columns to datetime
+    superstore_df.order_date = pd.to_datetime(superstore_df.order_date)
+    superstore_df.ship_date = pd.to_datetime(superstore_df.ship_date)
+    # Changing datatype of postal_code to int (to drop the 0) and then object type
+    superstore_df.postal_code = superstore_df.postal_code.astype(int)
+    superstore_df.postal_code = superstore_df.postal_code.astype(object)
+    # Return the dataframe
     return superstore_df
+
+
+
+
