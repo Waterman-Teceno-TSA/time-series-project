@@ -24,7 +24,7 @@ def get_db_url(db_name, username=user, hostname=host, password=password):
 
 query = '''
 SELECT  orders.*,
-        categories.`Sub-Category`,
+        categories.`Category`, categories.`Sub-Category`,
         customers.`Customer Name`,
         products.`Product Name`,
         regions.`Region Name`        
