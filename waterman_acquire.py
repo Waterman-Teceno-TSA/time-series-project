@@ -36,7 +36,7 @@ LEFT JOIN products USING (`Product ID`)
 LEFT JOIN regions USING (`Region ID`)
 '''
 
-def acquire_superstore(use_cache = True):
+def acquire_superstore(use_cache = False):
     '''
     
     '''
@@ -47,5 +47,14 @@ def acquire_superstore(use_cache = True):
     superstore_df = pd.read_sql(query, get_db_url('superstore_db'))
 
     superstore_df.to_csv('superstore.csv', index=False)
-
+    # rename all columns to lowercase
+    superstore_df.columns = [c.lower() for c in superstore_df.columns]
+    # replace spaces in column names with underscores
+    superstore_df.columns = [c.replace(' ', '_') for c in superstore_df.columns]
+    # replace - with _ in column names
+    superstore_df.columns = [c.replace('-', '_') for c in superstore_df.columns]
+    # convert the date columns to datetime
+    superstore_df['order_date'] = pd.to_datetime(superstore_df['order_date'])
+    superstore_df['ship_date'] = pd.to_datetime(superstore_df['ship_date'])
+    
     return superstore_df
