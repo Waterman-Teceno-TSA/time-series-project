@@ -43,7 +43,9 @@ def acquire_superstore(use_cache=True):
     # Checking if there is a local .csv file already in cache
     if os.path.exists("superstore.csv") and use_cache:
         print("Using cached csv")
-        return pd.read_csv("superstore.csv")
+        df = pd.read_csv("superstore.csv")
+        df.index = pd.to_datetime(df.order_date)
+        return df
     # SQL query using credentials and query
     superstore_df = pd.read_sql(query, get_db_url("superstore_db"))
     # rename all columns to lowercase
@@ -56,11 +58,15 @@ def acquire_superstore(use_cache=True):
     superstore_df = superstore_df.drop(
         columns=["customer_name", "region_id", "category_id", "country", "product_id"]
     )
+    # Converting order_date to datetime format
+    superstore_df["order_date"] = pd.to_datetime(superstore_df["order_date"])
+    # Converting ship_date to datetime format
+    superstore_df["ship_date"] = pd.to_datetime(superstore_df["ship_date"])
     # Changing datatype of postal_code to int (to drop the 0) and then object type
     superstore_df.postal_code = superstore_df.postal_code.astype(int)
     superstore_df.postal_code = superstore_df.postal_code.astype(object)
     # Creation of .csv file
-    superstore_df.to_csv("superstore.csv", index=False)
+    superstore_df.to_csv("superstore.csv", index_label=False)
     # Return the dataframe
     return superstore_df
 
@@ -69,9 +75,6 @@ def prepare_superstore(df):
     """
     This function takes our dataframe and feature engineers a unit_cost, unit_profit, and brand column. It then rounds the sales and profit columns. 
     """
-    # Convert time columns to datetime
-    df["order_date"] = pd.to_datetime(df["order_date"])
-    df["ship_date"] = pd.to_datetime(df["ship_date"])
     # Set index to order_date
     df.index = df.order_date
     # Sorting the index
@@ -91,12 +94,12 @@ def prepare_superstore(df):
     return df
 
 
-def wrangle_superstore():
+def wrangle_superstore(use_cache=True):
     """
     This function does both our acquire and prepare functions and returns the dataframe.
     """
     # Acquiring the dataframe from SQL
-    superstore_df = acquire_superstore()
+    superstore_df = acquire_superstore(use_cache=use_cache)
     # Additional preparation on the dataframe
     df = prepare_superstore(superstore_df)
     # Returning the dataframe
