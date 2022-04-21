@@ -70,8 +70,8 @@ def prepare_superstore(df):
     This function takes our dataframe and feature engineers a unit_cost, unit_profit, and brand column. It then rounds the sales and profit columns. 
     """
     # Convert time columns to datetime
-    superstore_df["order_date"] = pd.to_datetime(superstore_df["order_date"])
-    superstore_df["ship_date"] = pd.to_datetime(superstore_df["ship_date"])
+    df["order_date"] = pd.to_datetime(df["order_date"])
+    df["ship_date"] = pd.to_datetime(df["ship_date"])
     # Set index to order_date
     df.index = df.order_date
     # Sorting the index
