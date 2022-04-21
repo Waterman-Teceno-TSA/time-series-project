@@ -74,6 +74,8 @@ def prepare_superstore(df):
     '''
     # Set index to order_date
     df.index = df.order_date
+    # Sorting the index
+    df = df.sort_index()
     # Creation of unit_cost column
     df['unit_cost'] = df.sales / ((1 - df.discount) * df.quantity)
     # Creation of unit_profit column
