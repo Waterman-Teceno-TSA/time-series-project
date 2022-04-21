@@ -45,8 +45,6 @@ def acquire_superstore(use_cache = True):
         return pd.read_csv('superstore.csv')
     # SQL query using credentials and query
     superstore_df = pd.read_sql(query, get_db_url('superstore_db'))
-    # Creation of .csv file
-    superstore_df.to_csv('superstore.csv', index=False)
     # rename all columns to lowercase
     superstore_df.columns = [c.lower() for c in superstore_df.columns]
     # replace spaces in column names with underscores
@@ -64,6 +62,8 @@ def acquire_superstore(use_cache = True):
     # Changing datatype of postal_code to int (to drop the 0) and then object type
     superstore_df.postal_code = superstore_df.postal_code.astype(int)
     superstore_df.postal_code = superstore_df.postal_code.astype(object)
+    # Creation of .csv file
+    superstore_df.to_csv('superstore.csv', index=False)
     # Return the dataframe
     return superstore_df
 
@@ -72,6 +72,8 @@ def prepare_superstore(df):
     '''
     This function takes our dataframe and feature engineers a unit_cost, unit_profit, and brand column. It then rounds the sales and profit columns. 
     '''
+    # Set index to order_date
+    df.index = df.order_date
     # Creation of unit_cost column
     df['unit_cost'] = df.sales / ((1 - df.discount) * df.quantity)
     # Creation of unit_profit column
