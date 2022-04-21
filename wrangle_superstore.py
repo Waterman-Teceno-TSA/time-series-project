@@ -80,6 +80,8 @@ def prepare_superstore(df):
     df['unit_profit'] = df.profit / df.quantity
     # Creation of brand column
     df['brand'] = df.product_name.str.split(' ').str[0]
+    # Creation of product_line column
+    df['product_line'] = df.brand + '_' + df.sub_category
     # Rounding sales and profit to 2 decimal places 
     df['sales'] = df.sales.round(2)
     df['profit'] = df.profit.round(2)
