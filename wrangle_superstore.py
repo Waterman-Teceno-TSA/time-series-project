@@ -52,16 +52,10 @@ def acquire_superstore(use_cache=True):
     superstore_df.columns = [c.replace(" ", "_") for c in superstore_df.columns]
     # replace - with _ in column names
     superstore_df.columns = [c.replace("-", "_") for c in superstore_df.columns]
-    # convert the date columns to datetime
-    superstore_df["order_date"] = pd.to_datetime(superstore_df["order_date"])
-    superstore_df["ship_date"] = pd.to_datetime(superstore_df["ship_date"])
     # Dropping duplicate columns
     superstore_df = superstore_df.drop(
         columns=["customer_name", "region_id", "category_id", "country", "product_id"]
     )
-    # Set time columns to datetime
-    superstore_df.order_date = pd.to_datetime(superstore_df.order_date)
-    superstore_df.ship_date = pd.to_datetime(superstore_df.ship_date)
     # Changing datatype of postal_code to int (to drop the 0) and then object type
     superstore_df.postal_code = superstore_df.postal_code.astype(int)
     superstore_df.postal_code = superstore_df.postal_code.astype(object)
@@ -75,6 +69,9 @@ def prepare_superstore(df):
     """
     This function takes our dataframe and feature engineers a unit_cost, unit_profit, and brand column. It then rounds the sales and profit columns. 
     """
+    # Convert time columns to datetime
+    superstore_df["order_date"] = pd.to_datetime(superstore_df["order_date"])
+    superstore_df["ship_date"] = pd.to_datetime(superstore_df["ship_date"])
     # Set index to order_date
     df.index = df.order_date
     # Sorting the index
