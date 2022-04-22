@@ -196,9 +196,7 @@ def graph_top_and_bottom_sub_categories(df):
             df[df.sub_category == sub_category]
             .resample("3M")
             .sum()["profit"]
-            .plot(
-                label=sub_category, figsize=(20, 12), linewidth=4, ylim=(-1500, 2700),
-            )
+            .plot(label=sub_category, figsize=(12, 8), linewidth=4, ylim=(-1500, 2700),)
         )
     plt.axhline(y=0, color="black", linestyle="--")
     plt.legend(loc="lower left")
