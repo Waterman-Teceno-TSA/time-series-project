@@ -11,12 +11,9 @@
       - [Acquire](#acquire)
       - [Preparation and Splitting](#preparation-and-splitting)
   - [Exploration](#exploration)
-  - [Clustering](#clustering)
-  - [Modeling](#modeling)
   - [Deliverables](#deliverables)
     - [Final Report](#final-report)
     - [Modules](#modules)
-    - [Predictions](#predictions)
 - [Summary and Recommendations](#summary-and-recommendations)
 
 ## Project Goal
