@@ -201,3 +201,17 @@ def graph_top_and_bottom_sub_categories(df):
     plt.axhline(y=0, color="black", linestyle="--")
     plt.legend(loc="lower left")
 
+
+def avg_acc_brands(df):
+    '''
+    This function outputs a graph of the selected (through exploration) key brands to consider for average profit or loss outcomes for accessories. 
+    The only input is the df and there is no return.
+    '''
+    _list = ['Plantronics', 'Maxell', 'Razer', 'Case', 'Logitech', 'Case', 'V7', 'NETGEAR']
+    plt.figure(figsize=(16,13))
+    sns.barplot(x= 'brand', y = 'profit', data = df[(df.sub_category == 'Accessories') & (df.brand.isin(_list))]  , ci=None)
+    plt.xlabel('Product Line')
+    plt.ylabel('Profit')
+    plt.title('Major Accessory Profit/Loss by Brand')
+    plt.xticks(rotation=90)
+    plt.show()
