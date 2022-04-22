@@ -44,37 +44,36 @@ def acquire_superstore(use_cache=True):
     if os.path.exists("superstore.csv") and use_cache:
         print("Using cached csv")
         df = pd.read_csv("superstore.csv")
-        df.index = pd.to_datetime(df.order_date)
         return df
     # SQL query using credentials and query
-    superstore_df = pd.read_sql(query, get_db_url("superstore_db"))
-    # rename all columns to lowercase
-    superstore_df.columns = [c.lower() for c in superstore_df.columns]
-    # replace spaces in column names with underscores
-    superstore_df.columns = [c.replace(" ", "_") for c in superstore_df.columns]
-    # replace - with _ in column names
-    superstore_df.columns = [c.replace("-", "_") for c in superstore_df.columns]
-    # Dropping duplicate columns
-    superstore_df = superstore_df.drop(
-        columns=["customer_name", "region_id", "category_id", "country", "product_id"]
-    )
-    # Converting order_date to datetime format
-    superstore_df["order_date"] = pd.to_datetime(superstore_df["order_date"])
-    # Converting ship_date to datetime format
-    superstore_df["ship_date"] = pd.to_datetime(superstore_df["ship_date"])
-    # Changing datatype of postal_code to int (to drop the 0) and then object type
-    superstore_df.postal_code = superstore_df.postal_code.astype(int)
-    superstore_df.postal_code = superstore_df.postal_code.astype(object)
+    df = pd.read_sql(query, get_db_url("superstore_db"))
     # Creation of .csv file
-    superstore_df.to_csv("superstore.csv", index_label=False)
+    df.to_csv("superstore.csv", index=False)
     # Return the dataframe
-    return superstore_df
+    return df
 
 
 def prepare_superstore(df):
     """
     This function takes our dataframe and feature engineers a unit_cost, unit_profit, and brand column. It then rounds the sales and profit columns. 
     """
+    # rename all columns to lowercase
+    df.columns = [c.lower() for c in df.columns]
+    # replace spaces in column names with underscores
+    df.columns = [c.replace(" ", "_") for c in df.columns]
+    # replace - with _ in column names
+    df.columns = [c.replace("-", "_") for c in df.columns]
+    # Dropping duplicate columns
+    df = df.drop(
+        columns=["customer_name", "region_id", "category_id", "country", "product_id"]
+    )
+    # Converting order_date to datetime format
+    df["order_date"] = pd.to_datetime(df["order_date"])
+    # Converting ship_date to datetime format
+    df["ship_date"] = pd.to_datetime(df["ship_date"])
+    # Changing datatype of postal_code to int (to drop the 0) and then object type
+    df.postal_code = df.postal_code.astype(int)
+    df.postal_code = df.postal_code.astype(object)
     # Set index to order_date
     df.index = df.order_date
     # Sorting the index
@@ -99,8 +98,8 @@ def wrangle_superstore(use_cache=True):
     This function does both our acquire and prepare functions and returns the dataframe.
     """
     # Acquiring the dataframe from SQL
-    superstore_df = acquire_superstore(use_cache=use_cache)
+    df = acquire_superstore(use_cache=use_cache)
     # Additional preparation on the dataframe
-    df = prepare_superstore(superstore_df)
+    df = prepare_superstore(df)
     # Returning the dataframe
     return df
